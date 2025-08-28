@@ -174,11 +174,7 @@ export default function WeatherApp() {
                       key={i}
                       style={{ fontSize: "12px", textAlign: "center" }}
                     >
-                      {i === 0
-                        ? "Today"
-                        : new Date(f.date).toLocaleDateString("en-US", {
-                            weekday: "short",
-                          })}
+                      {new Date(f.date).toLocaleDateString()}
                       <div>{f.temp}°C</div>
                     </div>
                   ))}
