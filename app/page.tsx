@@ -6,7 +6,7 @@ import { CityWeather, fetchWeatherData } from "./weatherapi";
 export default function WeatherApp() {
   const [cities, setCities] = useState<any>([]);
   const [favoriteNames, setFavoriteNames] = useState<any>([]);
-  const [setFavoriteCities, setFavCities] = useState<any>([]);
+  const [favoriteCities, setFavoriteCities] = useState<any>([]);
   const [search, setSearch] = useState("");
   const [onlyFavorite, setOnlyFavorite] = useState(false);
   const [dark, setDark] = useState(false);
@@ -23,7 +23,7 @@ export default function WeatherApp() {
           return fetchWeatherData(c).catch(() => null);
         })
       ).then((res) => {
-        setFavCities(res.filter((r) => r !== null));
+        setFavoriteCities(res.filter((r) => r !== null));
       });
     }
   }, []);
@@ -55,11 +55,11 @@ export default function WeatherApp() {
     const key = city.city.toLowerCase();
     if (favoriteNames.includes(key)) {
       setFavoriteNames(favoriteNames.filter((f: string) => f !== key));
-      setFavCities(setFavoriteCities.filter((c: any) => c.city.toLowerCase() !== key));
+      setFavoriteCities(favoriteCities.filter((c: any) => c.city.toLowerCase() !== key));
     } else {
       setFavoriteNames([...favoriteNames, key]);
-      if (!setFavoriteCities.find((c: any) => c.city.toLowerCase() === key)) {
-        setFavCities([...setFavoriteCities, city]);
+      if (!favoriteCities.find((c: any) => c.city.toLowerCase() === key)) {
+        setFavoriteCities([...favoriteCities, city]);
       }
     }
   };
@@ -68,10 +68,10 @@ export default function WeatherApp() {
     const key = c.city.toLowerCase();
     setCities(cities.filter((x: any) => x.city.toLowerCase() !== key));
     setFavoriteNames(favoriteNames.filter((x: string) => x !== key));
-    setFavCities(setFavoriteCities.filter((x: any) => x.city.toLowerCase() !== key));
+    setFavoriteCities(favoriteCities.filter((x: any) => x.city.toLowerCase() !== key));
   };
 
-  const cityList = onlyFavorite ? setFavoriteCities : cities;
+  const cityList = onlyFavorite ? favoriteCities : cities;
 
   return (
     <div
