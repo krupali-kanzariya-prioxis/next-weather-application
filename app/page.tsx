@@ -5,10 +5,10 @@ import { CityWeather, fetchWeatherData } from "./weatherapi";
 
 export default function WeatherApp() {
   const [cities, setCities] = useState<any>([]);
-  const [favNames, setFavNames] = useState<any>([]);
-  const [favCities, setFavCities] = useState<any>([]);
+  const [favoriteNames, setFavoriteNames] = useState<any>([]);
+  const [setFavoriteCities, setFavCities] = useState<any>([]);
   const [search, setSearch] = useState("");
-  const [onlyFav, setOnlyFav] = useState(false);
+  const [onlyFavorite, setOnlyFavorite] = useState(false);
   const [dark, setDark] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -17,7 +17,7 @@ export default function WeatherApp() {
     const fav = localStorage.getItem("favoritesName");
     if (fav) {
       const parsed = JSON.parse(fav);
-      setFavNames(parsed);
+      setFavoriteNames(parsed);
       Promise.all(
         parsed.map((c: string) => {
           return fetchWeatherData(c).catch(() => null);
@@ -33,8 +33,8 @@ export default function WeatherApp() {
   }, [cities]);
 
   useEffect(() => {
-    localStorage.setItem("favoritesName", JSON.stringify(favNames));
-  }, [favNames]);
+    localStorage.setItem("favoritesName", JSON.stringify(favoriteNames));
+  }, [favoriteNames]);
 
   const searchCity = async (e: any) => {
     e.preventDefault();
@@ -53,13 +53,13 @@ export default function WeatherApp() {
 
   const favHandler = (city: any) => {
     const key = city.city.toLowerCase();
-    if (favNames.includes(key)) {
-      setFavNames(favNames.filter((f: string) => f !== key));
-      setFavCities(favCities.filter((c: any) => c.city.toLowerCase() !== key));
+    if (favoriteNames.includes(key)) {
+      setFavoriteNames(favoriteNames.filter((f: string) => f !== key));
+      setFavCities(setFavoriteCities.filter((c: any) => c.city.toLowerCase() !== key));
     } else {
-      setFavNames([...favNames, key]);
-      if (!favCities.find((c: any) => c.city.toLowerCase() === key)) {
-        setFavCities([...favCities, city]);
+      setFavoriteNames([...favoriteNames, key]);
+      if (!setFavoriteCities.find((c: any) => c.city.toLowerCase() === key)) {
+        setFavCities([...setFavoriteCities, city]);
       }
     }
   };
@@ -67,11 +67,11 @@ export default function WeatherApp() {
   const removeCity = (c: any) => {
     const key = c.city.toLowerCase();
     setCities(cities.filter((x: any) => x.city.toLowerCase() !== key));
-    setFavNames(favNames.filter((x: string) => x !== key));
-    setFavCities(favCities.filter((x: any) => x.city.toLowerCase() !== key));
+    setFavoriteNames(favoriteNames.filter((x: string) => x !== key));
+    setFavCities(setFavoriteCities.filter((x: any) => x.city.toLowerCase() !== key));
   };
 
-  const cityList = onlyFav ? favCities : cities;
+  const cityList = onlyFavorite ? setFavoriteCities : cities;
 
   return (
     <div
@@ -97,8 +97,8 @@ export default function WeatherApp() {
 
       <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
         <button
-          className={onlyFav ? "btn btn-warning" : "btn btn-outline-warning"}
-          onClick={() => setOnlyFav(!onlyFav)}
+          className={onlyFavorite ? "btn btn-warning" : "btn btn-outline-warning"}
+          onClick={() => setOnlyFavorite(!onlyFavorite)}
         >
           <Icons.Star size={14} /> Favorites
         </button>
@@ -130,7 +130,7 @@ export default function WeatherApp() {
                       <Icons.Star
                         size={16}
                         fill={
-                          favNames.includes(city.city.toLowerCase())
+                          favoriteNames.includes(city.city.toLowerCase())
                             ? "gold"
                             : "none"
                         }
